@@ -1,7 +1,5 @@
-import RPi.GPIO as G
 import bme280
 import smbus2
-import threading
 
 port = 1
 address = 0x76
