@@ -13,5 +13,3 @@ def bmeRead():
     global data
     data = bme280.sample(bus, address, calibration_params)
     print(f"Temp: {data.temperature:.2f}  Hum: {data.humidity:.2f}  Pres: {data.pressure:.2f}")
-    threading.Timer(2,bmeRead).start()
-    
