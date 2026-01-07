@@ -71,4 +71,3 @@ finally:
     servo.pwmStop()
     spi.close()                                      
     G.cleanup()
-        
