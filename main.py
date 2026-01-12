@@ -29,16 +29,17 @@ try:
     rfid.start()
     servo.pwmInit()
     buzzer.buzzInit()
+    rainsensor.init(bus=0, device=1) 
     while True:
         now = time.time()
         
-        #Temperature reading every 2 second
-        if (now - last_sensor >= 5):
+        #Temperature reading every 10 second
+        if (now - last_sensor >= 10):
             bme_sensor.bmeRead() 
             last_sensor = now
             
-        #LCD display Temp/Hum reading every 2 second
-        if (now - last_lcd >= 2):
+        #LCD display Temp/Hum reading every 10 second
+        if (now - last_lcd >= 10):
             lcd.lcdReading(bme_sensor.data.temperature, bme_sensor.data.humidity)
             last_lcd = now
         
@@ -54,7 +55,7 @@ try:
                 buzzer.buzz_deny()
             rfid.latest_id = None   # clear so it doesn't repeat
         
-        #Rain reading every 5 second
+        #Rain reading every 2 second
         if (now - last_rain >= 2):
             rain_value = rainsensor.read_adc(0)
             print("Rain ADC:", rain_value)
@@ -69,5 +70,6 @@ except KeyboardInterrupt:
     pass
 finally:
     servo.pwmStop()
-    spi.close()                                      
+    buzzer.pwmStop()
+    rainsensor.close() 
     G.cleanup()

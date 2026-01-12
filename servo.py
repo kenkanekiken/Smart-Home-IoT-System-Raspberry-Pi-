@@ -24,6 +24,7 @@ def pwmInit():
     pwm_laundry.start(90)
 
 def pwmStop():
+    global pwm_door, pwm_window, pwm_laundry
     if pwm_door is not None:
         pwm_door.stop()
         pwm_door = None
