@@ -15,13 +15,13 @@ def _worker():
     global latest_id, latest_text, _last_trigger_id, _last_trigger_time
     while True:
         now = time.time()
-        cid, text = reader.read()      # blocks here (OK)
+        cid, text = reader.read()      
         if cid == _last_trigger_id and (now - _last_trigger_time) < 2.0:
             continue
         _last_trigger_id = cid
         _last_trigger_time = now
         
-        latest_id = cid               # main loop can read this anytime
+        latest_id = cid              
         latest_text = text
 
 def start():
