@@ -10,8 +10,6 @@ except Exception:
 # ---- Pin mapping ----
 PIN_RELAY_FAN = 17      # Relay for fan
 PIN_BUZZER = 21         # Buzzer
-PIN_LED_G = 16          # Green LED
-PIN_LED_R = 20          # Red LED
 
 PIN_SERVO_DOOR = 13     # Door servo
 PIN_SERVO_WINDOW = 12   # Window servo
@@ -24,7 +22,6 @@ _status = {
     "laundry": "retracted",
     "fan": "off",
     "buzzer": "off",
-    "led": "idle",
     "on_pi": ON_PI,
 }
 
@@ -47,8 +44,6 @@ def init():
     # Outputs
     GPIO.setup(PIN_RELAY_FAN, GPIO.OUT)
     GPIO.setup(PIN_BUZZER, GPIO.OUT)
-    GPIO.setup(PIN_LED_G, GPIO.OUT)
-    GPIO.setup(PIN_LED_R, GPIO.OUT)
 
     GPIO.setup(PIN_SERVO_DOOR, GPIO.OUT)
     GPIO.setup(PIN_SERVO_WINDOW, GPIO.OUT)
@@ -57,17 +52,15 @@ def init():
     # Default off
     GPIO.output(PIN_RELAY_FAN, GPIO.LOW)
     GPIO.output(PIN_BUZZER, GPIO.LOW)
-    GPIO.output(PIN_LED_G, GPIO.LOW)
-    GPIO.output(PIN_LED_R, GPIO.LOW)
 
     # Servos at 50Hz
     _pwm_door = GPIO.PWM(PIN_SERVO_DOOR, 50)
     _pwm_window = GPIO.PWM(PIN_SERVO_WINDOW, 50)
     _pwm_laundry = GPIO.PWM(PIN_SERVO_LAUNDRY, 50)
 
-    _pwm_door.start(0)
-    _pwm_window.start(0)
-    _pwm_laundry.start(0)
+    _pwm_door.start(90)
+    _pwm_window.start(90)
+    _pwm_laundry.start(90)
 
 def cleanup():
     if ON_PI:
@@ -156,9 +149,6 @@ def perform_action(device: str, action: str):
         ("fan", "on"): fan_on,
         ("fan", "off"): fan_off,
         ("buzzer", "beep"): buzzer_beep,
-        ("led", "green"): led_green,
-        ("led", "red"): led_red,
-        ("led", "off"): led_off,
     }
 
     fn = routes.get((device, action))
