@@ -14,8 +14,8 @@ PIN_LED_G = 16          # Green LED
 PIN_LED_R = 20          # Red LED
 
 PIN_SERVO_DOOR = 13     # Door servo
-PIN_SERVO_WINDOW = 19   # Window servo
-PIN_SERVO_LAUNDRY = 12  # Laundry servo
+PIN_SERVO_WINDOW = 12   # Window servo
+PIN_SERVO_LAUNDRY = 19  # Laundry servo
 
 # ---- Memory status ----
 _status = {
@@ -87,13 +87,13 @@ def _set_servo_angle(pwm, angle: int):
 
 def door_open():
     global _status
-    _set_servo_angle(_pwm_door, 90)
+    _set_servo_angle(_pwm_door, 180)
     _status["door"] = "open"
     return True, "Door opened"
 
 def door_close():
     global _status
-    _set_servo_angle(_pwm_door, 0)
+    _set_servo_angle(_pwm_door, 90)
     _status["door"] = "closed"
     return True, "Door closed"
 
@@ -117,7 +117,7 @@ def laundry_extend():
 
 def laundry_retract():
     global _status
-    _set_servo_angle(_pwm_laundry, 0)
+    _set_servo_angle(_pwm_laundry, 180)
     _status["laundry"] = "retracted"
     return True, "Laundry retracted"
 
