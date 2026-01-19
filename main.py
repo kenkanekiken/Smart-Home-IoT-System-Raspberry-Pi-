@@ -2,10 +2,20 @@ import RPi.GPIO as G
 G.setwarnings(False)
 G.setmode(G.BCM)
 print("GPIO mode set")
-
+import os
 import bme_sensor, fan, lcd, rfid, servo, rainsensor, buzzer, led
 import time
+from influxdb_client import InfluxDBClient, Point
+from influxdb_client.client.write_api import SYNCHRONOUS
 print("Import done")
+
+token = "bntzzeAN8JahYHXWVgTSJLwouDuKgnjRSFPIo2Z0jYycGiLqPqGXUGuOlP8ahSOwonRwOhqTiao-1ib74oGkOQ==" # Or paste your token string here
+org = "dev team"
+url = "https://us-east-1-1.aws.cloud2.influxdata.com"
+bucket = "Smart home" # Ensure this bucket exists in your InfluxDB UI
+
+client = InfluxDBClient(url=url, token=token, org=org)
+write_api = client.write_api(write_options=SYNCHRONOUS)
 
 G.setup(17,G.OUT) #Relay
 #rfid servo 
@@ -59,6 +69,16 @@ try:
         if (now - last_rain >= 2):
             rain_value = rainsensor.read_adc(0)
             print("Rain ADC:", rain_value)
+            try:
+                point = Point("environment") \
+                    .tag("nodeId", "raspberry_pi_1") \
+                    .field("rain_adc", rain_value) \
+                    .field("temperature", bme_sensor.data.temperature)
+                
+                write_api.write(bucket=bucket, org=org, record=point)
+                print("Data sent to InfluxDB")
+            except Exception as e:
+                print(f"Failed to write to InfluxDB: {e}")
             last_rain = now
         
         fan.turn_on_fan(bme_sensor.data.temperature) #Turn on/off the fan
