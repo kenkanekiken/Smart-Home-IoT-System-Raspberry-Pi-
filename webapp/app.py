@@ -25,5 +25,4 @@ def api_action():
 
 if __name__ == "__main__":
     hardware.init()
-    # For LAN access on your WiFi network:
     app.run(host="0.0.0.0", port=5050, debug=False)

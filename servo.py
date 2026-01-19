@@ -1,6 +1,7 @@
 import RPi.GPIO as G
 import time
 import lcd
+import buzzer
 
 pwm_door = None
 pwm_window = None
