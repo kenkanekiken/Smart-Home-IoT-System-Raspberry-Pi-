@@ -10,6 +10,7 @@ def buzzInit():
     pwm_buzzer.stop()  # 50% duty cycle
 
 def pwmStop():
+    global pwm_buzzer
     if pwm_buzzer is not None:
         pwm_buzzer.stop()
         pwm_buzzer = None
