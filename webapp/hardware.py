@@ -1,6 +1,5 @@
 import time
 
-# ---- Try to import RPi.GPIO (if you run on laptop it won't crash) ----
 try:
     import RPi.GPIO as GPIO
     ON_PI = True
@@ -8,7 +7,7 @@ except Exception:
     GPIO = None
     ON_PI = False
 
-# ---- Pin mapping (based on what you used before) ----
+# ---- Pin mapping ----
 PIN_RELAY_FAN = 17      # Relay for fan
 PIN_BUZZER = 21         # Buzzer
 PIN_LED_G = 16          # Green LED
@@ -18,7 +17,7 @@ PIN_SERVO_DOOR = 13     # Door servo
 PIN_SERVO_WINDOW = 19   # Window servo
 PIN_SERVO_LAUNDRY = 12  # Laundry servo
 
-# ---- In-memory status (also great for sending to InfluxDB later) ----
+# ---- Memory status ----
 _status = {
     "door": "closed",
     "window": "closed",
@@ -78,10 +77,6 @@ def get_status():
     return dict(_status)
 
 def _set_servo_angle(pwm, angle: int):
-    """
-    Basic SG90-ish formula.
-    If your servo behaves differently, tweak duty formula.
-    """
     if not ON_PI:
         return
 
@@ -149,30 +144,6 @@ def buzzer_beep():
         GPIO.output(PIN_BUZZER, GPIO.LOW)
     _status["buzzer"] = "off"
     return True, "Buzzer beeped"
-
-def led_green():
-    global _status
-    _status["led"] = "green"
-    if ON_PI:
-        GPIO.output(PIN_LED_G, GPIO.HIGH)
-        GPIO.output(PIN_LED_R, GPIO.LOW)
-    return True, "LED set GREEN"
-
-def led_red():
-    global _status
-    _status["led"] = "red"
-    if ON_PI:
-        GPIO.output(PIN_LED_G, GPIO.LOW)
-        GPIO.output(PIN_LED_R, GPIO.HIGH)
-    return True, "LED set RED"
-
-def led_off():
-    global _status
-    _status["led"] = "idle"
-    if ON_PI:
-        GPIO.output(PIN_LED_G, GPIO.LOW)
-        GPIO.output(PIN_LED_R, GPIO.LOW)
-    return True, "LED OFF"
 
 def perform_action(device: str, action: str):
     routes = {
