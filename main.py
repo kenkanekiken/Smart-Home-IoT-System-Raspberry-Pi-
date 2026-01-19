@@ -39,7 +39,8 @@ try:
     rfid.start()
     servo.pwmInit()
     buzzer.buzzInit()
-    rainsensor.init(bus=0, device=1) 
+    rainsensor.init(bus=0, device=1)
+    lcd.clear_safe()
     while True:
         now = time.time()
         
@@ -50,6 +51,7 @@ try:
             
         #LCD display Temp/Hum reading every 10 second
         if (now - last_lcd >= 10):
+            lcd.clear_safe()
             lcd.lcdReading(bme_sensor.data.temperature, bme_sensor.data.humidity)
             last_lcd = now
         

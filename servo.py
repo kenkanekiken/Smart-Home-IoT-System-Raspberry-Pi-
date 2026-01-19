@@ -12,17 +12,22 @@ open_request = False
 last_state = None
 
 def pwmInit():
-    global pwm_door
+    global pwm_door, pwm_window, pwm_laundry
     pwm_door = G.PWM(13,50)
-    pwm_door.start(90)
+    pwm_door.start(0)
     
-    global pwm_window
     pwm_window = G.PWM(19,50)
-    pwm_window.start(90)
+    pwm_window.start(0)
     
-    global pwm_laundry
     pwm_laundry = G.PWM(12,50)
-    pwm_laundry.start(90)
+    pwm_laundry.start(0)
+    
+    time.sleep(0.2)
+
+    set_angle_door(90)
+    set_angle_window(90)
+    set_angle_laundry(90)
+    
 
 def pwmStop():
     global pwm_door, pwm_window, pwm_laundry
@@ -53,8 +58,8 @@ def door_open():
     if open_request and not doorOpen:
         set_angle_door(180)
         print("Door Open for 3 Second")
-        lcd.lcd.text("Door Open",1)
-        lcd.lcd.text("for 3 second",2)
+        lcd.clear_safe()
+        lcd.safe_text("Door Open",1)
         time.sleep(1)
         doorOpen = True
         doorOpen_time = now
@@ -89,15 +94,16 @@ def window_open(rain_value):
             print("Window Close")
             set_angle_laundry(0) # e window
             print("Laundry Pole Retract")
-            lcd.lcd.text("Window Close",1)
-            lcd.lcd.text("Pole Retract",2)
+            lcd.clear_safe()
+            lcd.safe_text("Window Close",1)
+            lcd.safe_text("Pole Retract",2)
         else:
             print("☀️ Sunny")
             set_angle_window(90) #this is now laundry pole
             print("Window Open")
             set_angle_laundry(90) #this is now window 
             print("Laundry Pole Extend")
-            lcd.lcd.text("Window Open",1)
-            lcd.lcd.text("Pole Extend",2)
+            lcd.safe_text("Window Open",1)
+            lcd.safe_text("Pole Extend",2)
         last_state = is_raining
         

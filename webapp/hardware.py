@@ -25,6 +25,8 @@ _status = {
     "on_pi": ON_PI,
 }
 
+# ---- Global variable ----
+override = False
 # ---- Servo PWM objects ----
 _pwm_door = None
 _pwm_window = None
@@ -58,9 +60,9 @@ def init():
     _pwm_window = GPIO.PWM(PIN_SERVO_WINDOW, 50)
     _pwm_laundry = GPIO.PWM(PIN_SERVO_LAUNDRY, 50)
 
-    _pwm_door.start(90)
-    _pwm_window.start(90)
-    _pwm_laundry.start(90)
+    _pwm_door.start(0)
+    _pwm_window.start(0)
+    _pwm_laundry.start(0)
 
 def cleanup():
     if ON_PI:
@@ -115,14 +117,16 @@ def laundry_retract():
     return True, "Laundry retracted"
 
 def fan_on():
-    global _status
+    global _status, override
+    override = True
     if ON_PI:
         GPIO.output(PIN_RELAY_FAN, GPIO.HIGH)
     _status["fan"] = "on"
     return True, "Fan ON"
 
 def fan_off():
-    global _status
+    global _status, override
+    override = False
     if ON_PI:
         GPIO.output(PIN_RELAY_FAN, GPIO.LOW)
     _status["fan"] = "off"
