@@ -19,9 +19,10 @@ def api_action():
 
     if not device or not action:
         return jsonify({"ok": False, "error": "Missing device/action"}), 400
-
+        
     ok, msg = hardware.perform_action(device, action)
     return jsonify({"ok": ok, "message": msg, "status": hardware.get_status()}), (200 if ok else 400)
+
 
 if __name__ == "__main__":
     hardware.init()

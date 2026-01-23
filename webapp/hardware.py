@@ -6,7 +6,7 @@ try:
 except Exception:
     GPIO = None
     ON_PI = False
-
+    
 # ---- Pin mapping ----
 PIN_RELAY_FAN = 17      # Relay for fan
 PIN_BUZZER = 21         # Buzzer
@@ -25,8 +25,6 @@ _status = {
     "on_pi": ON_PI,
 }
 
-# ---- Global variable ----
-override = False
 # ---- Servo PWM objects ----
 _pwm_door = None
 _pwm_window = None
@@ -117,16 +115,14 @@ def laundry_retract():
     return True, "Laundry retracted"
 
 def fan_on():
-    global _status, override
-    override = True
+    global _status
     if ON_PI:
         GPIO.output(PIN_RELAY_FAN, GPIO.HIGH)
     _status["fan"] = "on"
     return True, "Fan ON"
 
 def fan_off():
-    global _status, override
-    override = False
+    global _status
     if ON_PI:
         GPIO.output(PIN_RELAY_FAN, GPIO.LOW)
     _status["fan"] = "off"
