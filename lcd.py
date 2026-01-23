@@ -4,8 +4,10 @@ import time
 lcd = LCD()
 
 def lcdReading(temp, hum):
-    lcd.text(f"Temp: {temp:.2f}", 1)
-    lcd.text(f"Hum: {hum:.2f}", 2)
+#     lcd.text(f"Temp: {temp:.2f}", 1)
+#     lcd.text(f"Hum: {hum:.2f}", 2)
+    safe_text(f"Temp: {temp:.2f}", 1)
+    safe_text(f"Hum: {hum:.2f}", 2)
 
 def safe_text(msg, line):
     try:

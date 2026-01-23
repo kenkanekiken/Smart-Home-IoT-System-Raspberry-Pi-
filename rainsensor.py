@@ -1,33 +1,11 @@
-# import spidev
-# 
-# spi = spidev.SpiDev()
-# spi.open(0, 1)               # bus 0, CE1
-# spi.max_speed_hz = 1350000   # speed for MCP3008
-# 
-# 
-# # READ MCP3008 CHANNEL
-# def read_adc(channel):
-#     """
-#     Read ADC value from MCP3008 (0–1023)
-#     """
-#     if channel < 0 or channel > 7:
-#         return -1
-# 
-#     # MCP3008 protocol
-#     adc = spi.xfer2([
-#         1,                      # start bit
-#         (8 + channel) << 4,     # single-ended
-#         0
-#     ])
-# 
-#     value = ((adc[1] & 3) << 8) | adc[2]
-#     return value
-#
-
 import spidev
 
 _spi = spidev.SpiDev()
 _inited = False
+
+weather = None
+window_status = None
+pole_status = None
 
 def init(bus=0, device=1, speed=1350000):
     global _inited
@@ -50,7 +28,31 @@ def read_adc(channel):
 
     adc = _spi.xfer2([1, (8 + channel) << 4, 0])
     return ((adc[1] & 3) << 8) | adc[2]
+                
+def is_raining():
+    is_raining = read_adc(0) < 500
+    if is_raining:
+        weather = "Raining"
+    else:
+        weather = "Sunny"
+    return weather
 
+def window_status():
+    is_raining = read_adc(0) < 500
+    if is_raining:
+        window_status = "Close"
+    else:
+        window_status = "Open"
+    return window_status
+
+def pole_status():
+    is_raining = read_adc(0) < 500
+    if is_raining:
+        pole_status = "Retract"
+    else:
+        pole_status = "Extend"
+    return pole_status       
+    
 def close():
     global _inited
     if _inited:
