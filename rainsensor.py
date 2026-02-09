@@ -19,7 +19,6 @@ def read_adc(channel):
     if not _inited:
         init()
 
-    # IMPORTANT: re-assert (other modules may have changed these)
     _spi.max_speed_hz = 1350000
     _spi.mode = 0b00
 
