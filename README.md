@@ -1,4 +1,5 @@
 🏠 Smart Home IoT System (Raspberry Pi)
+Video of Prototype: https://youtube.com/shorts/vM1uQvEnK7M?si=o_nDKT4kMYFRyJoW 
 
 A Raspberry Pi–based smart home automation system that monitors environmental conditions and controls multiple household devices automatically and manually. The system integrates various sensors and actuators, including a BME280 environmental sensor, rain sensor, RFID access control, LCD display, servo motors, and a fan controlled via GPIO.
 
